@@ -1,22 +1,35 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import QUESTIONS from '../questions.js';
+import QUESTIONS from "../questions.js";
+import quizCompleteImg from '../assets/quiz-complete.png';
 
 export default function Quiz() {
   const [userAnswers, setUserAnswers] = useState([]);
 
-
-  //derived state
+  //Derived state with computed values
   const activeQuestionIndex = userAnswers.length;
-  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
-
+ 
+  // to  find out wen the quiz is over (when the number of userAnswers = questions)
+  const quizIsComplete = activeQuestionIndex === QUESTIONS.length;
 
   function handleSelectAnswer(selectedAnswer) {
     setUserAnswers((prevUserAnswers) => {
       return [...prevUserAnswers, selectedAnswer];
     });
   }
+
+  if (quizIsComplete) {
+    return (
+      <div id="summary">
+        <img src={quizCompleteImg} alt="Trophy icon" />
+        <h2>Quiz Completed!</h2>
+      </div>
+    );
+  }
+
+  // this block only executes if we still have a question to display
+  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
+  shuffledAnswers.sort(() => Math.random() - 0.5);
 
   return (
     <div id="quiz">
