@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 import QUESTIONS from "../questions.js";
 import QuestionTimer from "./QuestionTimer.jsx";
@@ -13,14 +13,20 @@ export default function Quiz() {
   // to  find out wen the quiz is over (when the number of userAnswers = questions)
   const quizIsComplete = activeQuestionIndex === QUESTIONS.length;
 
-  const handleSelectAnswer = useCallback(function handleSelectAnswer(selectedAnswer) {
+  const handleSelectAnswer = useCallback(function handleSelectAnswer(
+    selectedAnswer
+  ) {
     setUserAnswers((prevUserAnswers) => {
       return [...prevUserAnswers, selectedAnswer];
     });
-  }, []); //[] add list of dependencies
+  },
+  []); //[] add list of dependencies
 
   // useCallback to ensure the function doesnt get recreated unless it needed because their dependencies change
-  const handleSkipAnswer = useCallback(() => handleSelectAnswer(null), [handleSelectAnswer]);
+  const handleSkipAnswer = useCallback(
+    () => handleSelectAnswer(null),
+    [handleSelectAnswer]
+  );
 
   if (quizIsComplete) {
     return (
@@ -38,7 +44,13 @@ export default function Quiz() {
   return (
     <div id="quiz">
       <div id="question">
-        <QuestionTimer timeout={10000} onTimeout={handleSkipAnswer} />
+        <QuestionTimer
+          //Using keys to reset QuestionTimer - every time the key changes (when the question changes),
+          // react will unmount and remount this component, it will destroy the old component and create a new one
+          key={activeQuestionIndex}
+          timeout={10000}
+          onTimeout={handleSkipAnswer}
+        />
         <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
         <ul id="answers">
           {/* {QUESTIONS[activeQuestionIndex].answers.map((answer) => ( */}
