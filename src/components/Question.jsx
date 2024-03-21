@@ -6,17 +6,23 @@ import QUESTIONS from "../questions.js";
 
 export default function Question({
   index, // is te active question index
-  // questionText,
-  // answers,
   onSelectAnswer,
-  // selectedAnswer,
-  //answerState,
   onSkipAnswer,
 }) {
   const [answer, setAnswer] = useState({
     selectedAnswer: "",
     isCorrect: null,
   });
+
+  let timer = 10000;
+
+  if (answer.selectedAnswer) {
+    timer = 1000;
+  }
+
+  if (answer.isCorrect !== null) {
+    timer = 2000;
+  }
 
   function handleSelectAnswer(answer) {
     setAnswer({
@@ -47,19 +53,14 @@ export default function Question({
   return (
     <div id="question">
       <QuestionTimer
-        //Using keys to reset QuestionTimer - every time the key changes (when the question changes),
-        // react will unmount and remount this component, it will destroy the old component and create a new one
-        // key={activeQuestionIndex}
-        timeout={10000}
-        onTimeout={onSkipAnswer}
+        key={timer}
+        timeout={timer}
+        onTimeout={answer.selectedAnswer === "" ? onSkipAnswer : null}
+        mode={answerState}
       />
-      {/* <h2>{questionText}</h2> */}
       <h2>{QUESTIONS[index].text}</h2>
       <Answers
-        // key={activeQuestionIndex}
-        // answers={answers}
         answers={QUESTIONS[index].answers}
-        // selectedAnswer={selectedAnswer}
         selectedAnswer={answer.selectedAnswer}
         answerState={answerState}
         onSelect={handleSelectAnswer}
