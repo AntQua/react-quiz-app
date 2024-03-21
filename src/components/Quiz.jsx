@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
 
 import QUESTIONS from "../questions.js";
-import QuestionTimer from "./QuestionTimer.jsx";
-import Answers from "./Answers.jsx";
+// import QuestionTimer from "./QuestionTimer.jsx";
+// import Answers from "./Answers.jsx";
+import Question from "./Question.jsx";
 import quizCompleteImg from "../assets/quiz-complete.png";
 
 export default function Quiz() {
@@ -59,20 +60,14 @@ export default function Quiz() {
   return (
     <div id="quiz">
       <div id="question">
-        <QuestionTimer
-          //Using keys to reset QuestionTimer - every time the key changes (when the question changes),
-          // react will unmount and remount this component, it will destroy the old component and create a new one
+        <Question
           key={activeQuestionIndex}
-          timeout={10000}
-          onTimeout={handleSkipAnswer}
-        />
-        <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
-        <Answers 
-          key={activeQuestionIndex}
+          questionText={QUESTIONS[activeQuestionIndex].text}
           answers={QUESTIONS[activeQuestionIndex].answers}
-          selectedAnswer={ userAnswers[userAnswers.length - 1]}
           answerState={answerState}
-          onSelect={handleSelectAnswer}
+          selectedAnswer={userAnswers[userAnswers.length - 1]}
+          onSelectAnswer={handleSelectAnswer}
+          onSkipAnswer={handleSkipAnswer}
         />
       </div>
     </div>
